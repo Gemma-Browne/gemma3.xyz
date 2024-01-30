@@ -1,31 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Coming Soon</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<style>
-body,h1 {font-family: "Raleway", sans-serif}
-body, html {height: 100%}
-.bgimg {
-  background-image: url('https://cataas.com/cat');
-  min-height: 100%;
-  background-position: center;
-  background-size: cover;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Emojis</title>
+  <style>
+    .emoji {
+      position: absolute;
+      font-size: 3em;
+      opacity: 1;
+      transition: opacity 1s ease-out, transform 0.2s ease-out;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+    }
+
+    .modal input {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
 
-
-   
-
-  <div class="w3-display-middle">
-    <h1 class="w3-jumbo w3-animate-top">COMING SOON</h1>
-
+<div class="modal" id="loginModal">
+  <div class="login-button">
+    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="StoneyModBot" data-size="large" data-userpic="false" data-auth-url="#" data-request-access="write"></script>
+  </div>
 </div>
+</div>
+
+<script>
+  const emojis = ["😶‍🌫️","😮‍💨","😌","🌿","💨","🔥","🦎","🍃"]; // Add more emojis as needed
+
+  let clickCount = 0; // Move clickCount outside of createEmoji
+
+  function getRandomEmoji() {
+    const randomIndex = Math.floor(Math.random() * emojis.length);
+    return emojis[randomIndex];
+  }
+
+  function getRandomPosition() {
+    const maxX = window.innerWidth - 100; // Adjust as needed
+    const maxY = window.innerHeight - 100; // Adjust as needed
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    return { x, y };
+  }
+
+  function createEmoji() {
+    const emoji = document.createElement("div");
+    emoji.classList.add("emoji");
+    emoji.innerHTML = getRandomEmoji();
+
+    const { x, y } = getRandomPosition();
+    emoji.style.left = `${x}px`;
+    emoji.style.top = `${y}px`;
+
+    if (emoji.innerHTML === "🦎") { // Check if the emoji is the lizard emoji
+      emoji.addEventListener("click", () => {
+        emoji.style.transform = "rotate(20deg)";
+        setTimeout(() => {
+          emoji.style.transform = "rotate(0deg)";
+        }, 200);
+
+        clickCount++;
+
+        if (clickCount === 3) {
+          document.getElementById("loginModal").style.display = "block";
+        }
+      });
+    }
+
+    document.body.appendChild(emoji);
+
+    setTimeout(() => {
+      emoji.style.opacity = 0;
+    }, Math.random() * 5000 + 1000); // Random fade-out time between 1 to 6 seconds
+
+    setTimeout(() => {
+      document.body.removeChild(emoji);
+    }, 7000); // Remove the element from the DOM after 7 seconds
+  }
+
+  function generateRandomEmojis() {
+    setInterval(createEmoji, 500); // Generate a new emoji every 3 seconds
+  }
+
+  function login() {
+    // Add your login logic here
+    alert("Login logic goes here!");
+    // Close the modal
+    document.getElementById("loginModal").style.display = "none";
+  }
+
+  window.onload = generateRandomEmojis;
+</script>
 
 </body>
 </html>
